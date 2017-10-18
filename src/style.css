@@ -15,16 +15,11 @@ canvas {
   width: 100%;
   height: 100%;
 }
-.current-score {
-  left: 20px;
-}
-.top-score {
-  right: 20px;
-}
 .score {
   display: block;
   position: absolute;
   top: 15px;
+  left: 20px;
   z-index: 1;
   font-size: 20px;
 }
@@ -61,4 +56,11 @@ button{
 button:hover{
   background-color: #ffffff;
   color: #000000;
+}
+.character-table {
+  color: white;
+  display: block;
+  position: absolute;
+  right: 20px;
+  z-index: 1;
 }

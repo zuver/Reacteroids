@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Ship from './Ship';
 import Asteroid from './Asteroid';
+import CharacterTable from './CharacterTable';
 import { randomNumBetweenExcluding } from './helpers'
 
 const KEY = {
@@ -248,11 +249,16 @@ export class Reacteroids extends Component {
     return (
       <div>
         { endgame }
-        <span className="score current-score" >Score: {this.state.currentScore}</span>
-        <span className="score top-score" >Top Score: {this.state.topScore}</span>
+        <span className="score" >
+          <div>Top Score: {this.state.topScore}</div>
+          <div>Your Score: {this.state.currentScore}</div>
+        </span>
         <span className="controls" >
-          Use [A][S][W][D] or [←][↑][↓][→] to MOVE<br/>
+          Use [W][A][S][D] or [↑][←][↓][→] to MOVE<br/>
           Use [SPACE] to SHOOT
+        </span>
+        <span className="character-table">
+          <CharacterTable />
         </span>
         <canvas ref="canvas"
           width={this.state.screen.width * this.state.screen.ratio}
