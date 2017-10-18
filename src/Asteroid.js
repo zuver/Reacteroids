@@ -1,3 +1,4 @@
+import Character from './Character';
 import Particle from './Particle';
 import { asteroidVertices, randomNumBetween } from './helpers';
 
