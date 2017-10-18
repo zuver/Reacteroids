@@ -226,11 +226,11 @@ export class Reacteroids extends Component {
     let message;
 
     if (this.state.currentScore <= 0) {
-      message = '0 points... So sad.';
+      message = '0 points :(';
     } else if (this.state.currentScore >= this.state.topScore){
-      message = 'Top score with ' + this.state.currentScore + ' points. Woo!';
+      message = 'Top score with ' + this.state.currentScore + ' points!';
     } else {
-      message = this.state.currentScore + ' Points though :)'
+      message = this.state.currentScore + ' points';
     }
 
     if(!this.state.inGame){
