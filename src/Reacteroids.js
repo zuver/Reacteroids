@@ -34,12 +34,14 @@ export class Reacteroids extends Component {
       asteroidCount: 3,
       currentScore: 0,
       topScore: localStorage['topscore'] || 0,
-      inGame: false
+      inGame: false,
+      collectedCharacters: {}
     }
     this.ship = [];
     this.asteroids = [];
     this.bullets = [];
     this.particles = [];
+    this.characters = [];
   }
 
   handleResize(value, e){
@@ -103,13 +105,15 @@ export class Reacteroids extends Component {
 
     // Check for colisions
     this.checkCollisionsWith(this.bullets, this.asteroids);
-    this.checkCollisionsWith(this.ship, this.asteroids);
+    this.checkCollisionsWithCharacters(this.ship[0], this.characters);
+    this.checkCollisionsWith(this.ship, this.asteroids);    
 
     // Remove or render
     this.updateObjects(this.particles, 'particles')
     this.updateObjects(this.asteroids, 'asteroids')
     this.updateObjects(this.bullets, 'bullets')
     this.updateObjects(this.ship, 'ship')
+    this.updateObjects(this.characters, 'characters')
 
     context.restore();
 
@@ -123,6 +127,20 @@ export class Reacteroids extends Component {
         currentScore: this.state.currentScore + points,
       });
     }
+  }
+
+  collectCharacter(character) {
+    const collectedCharacters = this.state.collectedCharacters;
+
+    if (collectedCharacters[character]) {
+      collectedCharacters[character]++;
+    } else {
+      collectedCharacters[character] = 1;
+    }
+
+    this.setState({
+      collectedCharacters
+    });
   }
 
   startGame(){
@@ -145,6 +163,8 @@ export class Reacteroids extends Component {
     // Make asteroids
     this.asteroids = [];
     this.generateAsteroids(this.state.asteroidCount)
+
+    this.characters = [];
   }
 
   gameOver(){
@@ -172,7 +192,8 @@ export class Reacteroids extends Component {
           y: randomNumBetweenExcluding(0, this.state.screen.height, ship.position.y-60, ship.position.y+60)
         },
         create: this.createObject.bind(this),
-        addScore: this.addScore.bind(this)
+        addScore: this.addScore.bind(this),
+        onCollectCharacter: this.collectCharacter.bind(this)
       });
       this.createObject(asteroid, 'asteroids');
     }
@@ -208,6 +229,18 @@ export class Reacteroids extends Component {
         }
       }
     }
+  }
+
+  checkCollisionsWithCharacters(ship, characters) {
+    if (!ship) {
+      return;
+    }
+
+    characters.forEach(character => {
+      if (this.checkCollision(ship, character)) {
+        character.onCollected();
+      }
+    })
   }
 
   checkCollision(obj1, obj2){
@@ -258,7 +291,7 @@ export class Reacteroids extends Component {
           Use [SPACE] to SHOOT
         </span>
         <span className="character-table">
-          <CharacterTable />
+          <CharacterTable characters={this.state.collectedCharacters} />
         </span>
         <canvas ref="canvas"
           width={this.state.screen.width * this.state.screen.ratio}

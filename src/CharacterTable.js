@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
+import Alphabet from './Alphabet';
 
 class CharacterTable extends Component {
   constructor(props) {
-    super();
+    super(props);
   }
 
   render() {
-    const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-    const alphabetCells = alphabet.map((character, index) => {
+    const alphabetCells = Alphabet.map((character, index) => {
       return <td key={index}>{character}</td>
     });
 
-    const characterCounts = alphabet.map((character, index) => {
-      return <td key={index}>0</td>
+    const characterCounts = Alphabet.map((character, index) => {
+      return <td key={index}>{this.props.characters[character] || 0}</td>
     });
 
     return (

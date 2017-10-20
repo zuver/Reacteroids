@@ -1,15 +1,34 @@
 import React from 'react';
+import Alphabet from './Alphabet';
+import { randomNumBetween } from './helpers';
 
-export default class Character extends React.Component {
-  constructor(props) {
-    super();
+export default class Character {
+  constructor(args) {
+    this.value = Alphabet[Math.floor(randomNumBetween(0, Alphabet.length - 1))];
+    this.position = args.position;
+    this.radius = 10;
+    this.asteroid = args.asteroid;
+    this.onCollectCharacter = args.onCollectCharacter;
   }
 
-  render() {
-    return (
-      <div>
-        {this.props.value}
-      </div>
-    );
+  onCollected() {
+    this.delete = true;
+    this.asteroid = null;
+    this.onCollectCharacter(this.value);
+  }
+
+  render(state) {
+    // Set position to asteroid position
+    if (this.asteroid) {
+      this.position = this.asteroid.position;
+    }
+
+    const context = state.context;
+    context.save();
+    context.translate(this.position.x, this.position.y);
+    context.fillStyle = 'yellow';
+    context.font = '20px serif';
+    context.fillText(this.value, -5, 5);
+    context.restore();
   }
 }

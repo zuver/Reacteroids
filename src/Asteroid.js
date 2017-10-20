@@ -15,7 +15,10 @@ export default class Asteroid {
     this.score = (80/this.radius)*5;
     this.create = args.create;
     this.addScore = args.addScore;
-    this.vertices = asteroidVertices(8, args.size)
+    this.onCollectCharacter = args.onCollectCharacter;
+    this.vertices = asteroidVertices(8, args.size);
+    this.character = new Character({ asteroid: this, position: args.position, onCollectCharacter: args.onCollectCharacter });
+    this.create(this.character, 'characters');
   }
 
   destroy(){
@@ -50,7 +53,8 @@ export default class Asteroid {
             y: randomNumBetween(-10, 20)+this.position.y
           },
           create: this.create.bind(this),
-          addScore: this.addScore.bind(this)
+          addScore: this.addScore.bind(this),
+          onCollectCharacter: this.onCollectCharacter.bind(this)
         });
         this.create(asteroid, 'asteroids');
       }
