@@ -8,9 +8,6 @@ const KEY = {
   LEFT:  37,
   RIGHT: 39,
   UP: 38,
-  A: 65,
-  D: 68,
-  W: 87,
   SPACE: 32
 };
 
@@ -56,9 +53,9 @@ export class Reacteroids extends Component {
 
   handleKeys(value, e){
     let keys = this.state.keys;
-    if(e.keyCode === KEY.LEFT   || e.keyCode === KEY.A) keys.left  = value;
-    if(e.keyCode === KEY.RIGHT  || e.keyCode === KEY.D) keys.right = value;
-    if(e.keyCode === KEY.UP     || e.keyCode === KEY.W) keys.up    = value;
+    if(e.keyCode === KEY.LEFT) keys.left = value;
+    if(e.keyCode === KEY.RIGHT) keys.right = value;
+    if(e.keyCode === KEY.UP) keys.up = value;
     if(e.keyCode === KEY.SPACE) keys.space = value;
     this.setState({
       keys : keys
@@ -287,7 +284,7 @@ export class Reacteroids extends Component {
           <div>Your Score: {this.state.currentScore}</div>
         </span>
         <span className="controls" >
-          Use [W][A][S][D] or [↑][←][↓][→] to MOVE<br/>
+          Use [↑][←][↓][→] to MOVE<br/>
           Use [SPACE] to SHOOT
         </span>
         <span className="character-table">
