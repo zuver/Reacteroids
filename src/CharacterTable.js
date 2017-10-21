@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Alphabet from './Alphabet';
 
 class CharacterTable extends Component {
   constructor(props) {
@@ -7,12 +6,14 @@ class CharacterTable extends Component {
   }
 
   render() {
-    const alphabetCells = Alphabet.map((character, index) => {
+    const collectedCharacters = Object.keys(this.props.characters);
+
+    const alphabetCells = collectedCharacters.map((character, index) => {
       return <td key={index}>{character}</td>
     });
 
-    const characterCounts = Alphabet.map((character, index) => {
-      return <td key={index}>{this.props.characters[character] || 0}</td>
+    const characterCounts = collectedCharacters.map((character, index) => {
+      return <td key={index}>{this.props.characters[character]}</td>
     });
 
     return (
