@@ -62,5 +62,6 @@ button:hover{
   display: block;
   position: absolute;
   right: 20px;
+  top: 15px;
   z-index: 1;
 }

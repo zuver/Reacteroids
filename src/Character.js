@@ -13,15 +13,12 @@ export default class Character {
 
   onCollected() {
     this.delete = true;
-    this.asteroid = null;
     this.onCollectCharacter(this.value);
   }
 
   render(state) {
     // Set position to asteroid position
-    if (this.asteroid) {
-      this.position = this.asteroid.position;
-    }
+    this.position = this.asteroid.position;
 
     const context = state.context;
     context.save();

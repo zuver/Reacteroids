@@ -285,8 +285,7 @@ export class Reacteroids extends Component {
           <div>Your Score: {this.state.currentScore}</div>
         </span>
         <span className="controls" >
-          Use [↑][←][↓][→] to MOVE<br/>
-          Use [SPACE] to SHOOT
+          Use [↑][←][↓][→] to MOVE • Use [SPACE] to SHOOT
         </span>
         <span className="character-table">
           <CharacterTable characters={this.state.collectedCharacters} />
