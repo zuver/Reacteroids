@@ -144,6 +144,7 @@ export class Reacteroids extends Component {
     this.setState({
       inGame: true,
       currentScore: 0,
+      collectedCharacters: {}
     });
 
     // Make ship
