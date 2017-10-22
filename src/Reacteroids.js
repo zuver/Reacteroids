@@ -33,7 +33,7 @@ export class Reacteroids extends Component {
         down  : 0,
         space : 0,
       },
-      asteroidCount: 3,
+      asteroidCount: 1,
       currentScore: 0,
       topScore: localStorage['topscore'] || 0,
       inGame: false,
