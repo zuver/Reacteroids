@@ -4,6 +4,7 @@ import Asteroid from './Asteroid';
 import CharacterTable from './CharacterTable';
 import TextInput from './TextInput';
 import Alphabet from './Alphabet';
+import TrieSearch from 'trie-search';
 import Dictionary from './data/dictionary';
 import { randomNumBetweenExcluding } from './helpers'
 
@@ -84,6 +85,12 @@ export class Reacteroids extends Component {
   }
 
   submitWord(characterArray) {
+    const submittedWord = characterArray.join('');
+
+    if (!this.isWordInDictionary(submittedWord)) {
+      return;
+    }
+
     let collectedCharactersClone = Object.assign({}, this.state.collectedCharacters);
 
     const canWithdrawFromCollectedCharacters =
@@ -97,11 +104,19 @@ export class Reacteroids extends Component {
       });
 
     if (canWithdrawFromCollectedCharacters) {
-      this.setState({ collectedCharacters: collectedCharactersClone, textInputValue: [] });
-      this.onWordSuccess(characterArray.join(''));
+      this.setState({ collectedCharacters: collectedCharactersClone });
+      this.onWordSuccess(submittedWord);
     }
   }
 
+  // Checks if a given word is in the dictionary
+  isWordInDictionary(word) {
+    const dictionaryLookupResult = this.state.dictionary.get(word);
+
+    return dictionaryLookupResult.length && dictionaryLookupResult[0].word === word;
+  }
+
+  // Called when the player has successfully spelled a word
   onWordSuccess(word) {
     alert('You spelled ' + word);
     this.setState({ textInputValue: [] })
@@ -123,7 +138,19 @@ export class Reacteroids extends Component {
 
   loadDictionary() {
     // Parse dictionary contents
-    const dictionaryArray = Dictionary.split('\n');
+    const wordArray = Dictionary.split('\n');
+
+    // Map dictionary items
+    const wordObjectArray =
+      wordArray.map(word => {
+        return { word, points: word.length }
+      });
+
+    // Construct trie data structure
+    const trie = new TrieSearch('word');
+    trie.addAll(wordObjectArray);
+
+    this.setState({ dictionary: trie });
   }
 
   componentWillUnmount() {

@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react-dom": "^0.14.0",
+    "trie-search": "^1.0.9"
   }
 }
