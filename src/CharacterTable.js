@@ -6,7 +6,11 @@ class CharacterTable extends Component {
   }
 
   render() {
-    const collectedCharacters = Object.keys(this.props.characters);
+    const collectedCharacters =
+      Object.keys(this.props.characters)
+        .filter(character => {
+          return this.props.characters[character] > 0;
+        });
 
     const alphabetCells = collectedCharacters.map((character, index) => {
       return <td key={index}>{character}</td>

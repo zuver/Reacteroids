@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import Ship from './Ship';
 import Asteroid from './Asteroid';
 import CharacterTable from './CharacterTable';
+import TextInput from './TextInput';
+import Alphabet from './Alphabet';
+import Dictionary from './data/dictionary';
 import { randomNumBetweenExcluding } from './helpers'
 
 const KEY = {
   LEFT:  37,
   RIGHT: 39,
   UP: 38,
-  SPACE: 32
+  SPACE: 32,
+  BACKSPACE: 8,
+  ENTER: 13
 };
 
 export class Reacteroids extends Component {
@@ -32,7 +37,8 @@ export class Reacteroids extends Component {
       currentScore: 0,
       topScore: localStorage['topscore'] || 0,
       inGame: false,
-      collectedCharacters: {}
+      collectedCharacters: {},
+      textInputValue: [],
     }
     this.ship = [];
     this.asteroids = [];
@@ -57,12 +63,54 @@ export class Reacteroids extends Component {
     if(e.keyCode === KEY.RIGHT) keys.right = value;
     if(e.keyCode === KEY.UP) keys.up = value;
     if(e.keyCode === KEY.SPACE) keys.space = value;
-    this.setState({
-      keys : keys
-    });
+
+    this.setState({ keys });
+
+    let textInputValue = this.state.textInputValue;
+
+    // If keydown event
+    if (value) {
+      const lowerCaseKey = e.key.toLowerCase();
+      if (Alphabet.includes(lowerCaseKey)) {
+        textInputValue.push(lowerCaseKey);
+        this.setState({ textInputValue });
+      } else if (e.keyCode === KEY.BACKSPACE) {
+        textInputValue.pop();
+        this.setState({ textInputValue });
+      } else if (e.keyCode === KEY.ENTER) {
+        this.submitWord(this.state.textInputValue)
+      }
+    }
+  }
+
+  submitWord(characterArray) {
+    let collectedCharactersClone = Object.assign({}, this.state.collectedCharacters);
+
+    const canWithdrawFromCollectedCharacters =
+      characterArray.every(character => {
+        if (collectedCharactersClone[character] && collectedCharactersClone[character] > 0) {
+          collectedCharactersClone[character]--;
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+    if (canWithdrawFromCollectedCharacters) {
+      this.setState({ collectedCharacters: collectedCharactersClone, textInputValue: [] });
+      this.onWordSuccess(characterArray.join(''));
+    }
+  }
+
+  onWordSuccess(word) {
+    alert('You spelled ' + word);
+    this.setState({ textInputValue: [] })
   }
 
   componentDidMount() {
+    // Load dictionary
+    this.loadDictionary();
+
     window.addEventListener('keyup',   this.handleKeys.bind(this, false));
     window.addEventListener('keydown', this.handleKeys.bind(this, true));
     window.addEventListener('resize',  this.handleResize.bind(this, false));
@@ -71,6 +119,11 @@ export class Reacteroids extends Component {
     this.setState({ context: context });
     this.startGame();
     requestAnimationFrame(() => {this.update()});
+  }
+
+  loadDictionary() {
+    // Parse dictionary contents
+    const dictionaryArray = Dictionary.split('\n');
   }
 
   componentWillUnmount() {
@@ -144,7 +197,8 @@ export class Reacteroids extends Component {
     this.setState({
       inGame: true,
       currentScore: 0,
-      collectedCharacters: {}
+      collectedCharacters: {},
+      textInputValue: []
     });
 
     // Make ship
@@ -267,11 +321,11 @@ export class Reacteroids extends Component {
     if(!this.state.inGame){
       endgame = (
         <div className="endgame">
-          <p>Game over!</p>
+          <p>Game over</p>
           <p>{message}</p>
           <button
             onClick={ this.startGame.bind(this) }>
-            try again?
+            play again?
           </button>
         </div>
       )
@@ -286,6 +340,9 @@ export class Reacteroids extends Component {
         </span>
         <span className="controls" >
           Use [↑][←][↓][→] to MOVE • Use [SPACE] to SHOOT
+        </span>
+        <span className="text-input">
+          <TextInput value={this.state.textInputValue} />
         </span>
         <span className="character-table">
           <CharacterTable characters={this.state.collectedCharacters} />

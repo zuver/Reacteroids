@@ -65,3 +65,12 @@ button:hover{
   top: 15px;
   z-index: 1;
 }
+.text-input {
+  display: block;
+  font-size: 32px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  position: absolute;
+  top: 64px;
+  z-index: 1;
+}
