@@ -173,11 +173,11 @@ export class Reacteroids extends Component {
     context.fillRect(0, 0, this.state.screen.width, this.state.screen.height);
     context.globalAlpha = 1;
 
-    // Next set of asteroids
-    if(!this.asteroids.length){
+    // If there are no asteroids and the player is alive
+    if (!this.asteroids.length && this.ship.length) {
       let count = this.state.asteroidCount + 1;
       this.setState({ asteroidCount: count });
-      this.generateAsteroids(count)
+      this.generateAsteroids(count);
     }
 
     // Check for colisions
