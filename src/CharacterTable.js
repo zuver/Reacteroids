@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Vowels } from './Alphabet';
 
 class CharacterTable extends Component {
   constructor(props) {
@@ -8,16 +9,14 @@ class CharacterTable extends Component {
   render() {
     const collectedCharacters =
       Object.keys(this.props.characters)
-        .filter(character => {
-          return this.props.characters[character] > 0;
-        });
+        .filter(character => this.props.characters[character] > 0);
 
     const alphabetCells = collectedCharacters.map((character, index) => {
-      return <td key={index}>{character}</td>
+      return <td key={index} className={Vowels.includes(character) ? 'vowel' : 'consonant'}>{character}</td>
     });
 
     const characterCounts = collectedCharacters.map((character, index) => {
-      return <td key={index}>{this.props.characters[character]}</td>
+      return <td key={index} className={Vowels.includes(character) ? 'vowel' : 'consonant'}>{this.props.characters[character]}</td>
     });
 
     return (

@@ -74,3 +74,9 @@ button:hover{
   top: 64px;
   z-index: 1;
 }
+.vowel {
+  color: lightblue;
+}
+.consonant {
+  color: yellow;
+}

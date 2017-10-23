@@ -3,7 +3,7 @@ import Ship from './Ship';
 import Asteroid from './Asteroid';
 import CharacterTable from './CharacterTable';
 import TextInput from './TextInput';
-import Alphabet from './Alphabet';
+import { Alphabet } from './Alphabet';
 import TrieSearch from 'trie-search';
 import Dictionary from './data/dictionary';
 import { randomNumBetweenExcluding } from './helpers'

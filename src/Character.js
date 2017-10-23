@@ -1,5 +1,5 @@
 import React from 'react';
-import Alphabet from './Alphabet';
+import { Alphabet, Vowels }  from './Alphabet';
 import { randomNumBetween } from './helpers';
 
 export default class Character {
@@ -23,7 +23,7 @@ export default class Character {
     const context = state.context;
     context.save();
     context.translate(this.position.x, this.position.y);
-    context.fillStyle = 'yellow';
+    context.fillStyle = Vowels.includes(this.value) ? 'lightblue' : 'yellow';
     context.font = '20px serif';
     context.fillText(this.value, -5, 5);
     context.restore();
