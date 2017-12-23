@@ -4,6 +4,7 @@ import Asteroid from './Asteroid';
 import CharacterTable from './CharacterTable';
 import TextInput from './TextInput';
 import { Alphabet } from './Alphabet';
+import FlashMessage from './FlashMessage';
 import TrieSearch from 'trie-search';
 import Dictionary from './data/dictionary';
 import { randomNumBetweenExcluding } from './helpers'
@@ -40,6 +41,7 @@ export class Reacteroids extends Component {
       inGame: false,
       collectedCharacters: {},
       textInputValue: [],
+      flashMessage: { value: 'Welcome to the game', color: 'blue' }
     }
     this.ship = [];
     this.asteroids = [];
@@ -58,19 +60,18 @@ export class Reacteroids extends Component {
     });
   }
 
-  handleKeys(value, e){
+  handleKeys(isKeyDown, e){
     let keys = this.state.keys;
-    if(e.keyCode === KEY.LEFT) keys.left = value;
-    if(e.keyCode === KEY.RIGHT) keys.right = value;
-    if(e.keyCode === KEY.UP) keys.up = value;
-    if(e.keyCode === KEY.SPACE) keys.space = value;
+    if(e.keyCode === KEY.LEFT) keys.left = isKeyDown;
+    if(e.keyCode === KEY.RIGHT) keys.right = isKeyDown;
+    if(e.keyCode === KEY.UP) keys.up = isKeyDown;
+    if(e.keyCode === KEY.SPACE) keys.space = isKeyDown;
 
     this.setState({ keys });
 
     let textInputValue = this.state.textInputValue;
-
-    // If keydown event
-    if (value) {
+    
+    if (isKeyDown) {
       const lowerCaseKey = e.key.toLowerCase();
       if (Alphabet.includes(lowerCaseKey)) {
         textInputValue.push(lowerCaseKey);
@@ -79,15 +80,21 @@ export class Reacteroids extends Component {
         textInputValue.pop();
         this.setState({ textInputValue });
       } else if (e.keyCode === KEY.ENTER) {
-        this.submitWord(this.state.textInputValue)
+        this.submitWord(this.state.textInputValue);
       }
     }
   }
 
   submitWord(characterArray) {
     const submittedWord = characterArray.join('');
+    this.setState({ textInputValue: [] });
 
     if (!this.isWordInDictionary(submittedWord)) {
+      this.setState({ flashMessage: {
+        value: submittedWord + ' is not in our dictionary',
+        color: 'red'
+      }});
+
       return;
     }
 
@@ -118,8 +125,10 @@ export class Reacteroids extends Component {
 
   // Called when the player has successfully spelled a word
   onWordSuccess(word) {
-    alert('You spelled ' + word);
-    this.setState({ textInputValue: [] })
+    this.setState({ flashMessage: {
+      value: 'You spelled ' + word,
+      color: 'lightgreen'
+    }});
   }
 
   componentDidMount() {
@@ -225,14 +234,15 @@ export class Reacteroids extends Component {
       inGame: true,
       currentScore: 0,
       collectedCharacters: {},
-      textInputValue: []
+      textInputValue: [],
+      asteroidCount: 1
     });
 
     // Make ship
     let ship = new Ship({
       position: {
-        x: this.state.screen.width/2,
-        y: this.state.screen.height/2
+        x: this.state.screen.width / 2,
+        y: this.state.screen.height / 2
       },
       create: this.createObject.bind(this),
       onDie: this.gameOver.bind(this)
@@ -260,7 +270,7 @@ export class Reacteroids extends Component {
     }
   }
 
-  generateAsteroids(howMany){
+  generateAsteroids(howMany) {
     let asteroids = [];
     let ship = this.ship[0];
     for (let i = 0; i < howMany; i++) {
@@ -278,11 +288,13 @@ export class Reacteroids extends Component {
     }
   }
 
-  createObject(item, group){
+  // Pushes a game object to the global object repository
+  createObject(item, group) {
     this[group].push(item);
   }
 
-  updateObjects(items, group){
+  // Renders a specified group of objects
+  updateObjects(items, group) {
     let index = 0;
     for (let item of items) {
       if (item.delete) {
@@ -361,11 +373,11 @@ export class Reacteroids extends Component {
     return (
       <div>
         { endgame }
-        <span className="score" >
+        <span className="score">
           <div>Top Score: {this.state.topScore}</div>
           <div>Your Score: {this.state.currentScore}</div>
         </span>
-        <span className="controls" >
+        <span className="controls">
           Use [↑][←][↓][→] to MOVE • Use [SPACE] to SHOOT
         </span>
         <span className="text-input">
@@ -373,6 +385,9 @@ export class Reacteroids extends Component {
         </span>
         <span className="character-table">
           <CharacterTable characters={this.state.collectedCharacters} />
+        </span>
+        <span className="error">
+          <FlashMessage message={this.state.flashMessage.value} color={this.state.flashMessage.color}/>
         </span>
         <canvas ref="canvas"
           width={this.state.screen.width * this.state.screen.ratio}

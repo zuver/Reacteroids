@@ -80,3 +80,30 @@ button:hover{
 .consonant {
   color: yellow;
 }
+.error {
+  color: red;
+  display: block;
+  bottom: 15px;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+  z-index: 1;
+}
+.hidden {
+  display: none;
+}
+.flashit{
+  color: red;
+	-webkit-animation: flash linear 1s infinite;
+	animation: flash linear 1s infinite;
+}
+@-webkit-keyframes flash {
+	0% { opacity: 1; } 
+	50% { opacity: .5; } 
+	100% { opacity: 1; }
+}
+@keyframes flash {
+	0% { opacity: 1; } 
+	50% { opacity: .5; } 
+	100% { opacity: 1; }
+}
